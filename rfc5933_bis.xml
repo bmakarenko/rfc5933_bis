@@ -173,15 +173,12 @@ The OIDs in the structure above represent GOsudarstvennyy STandart (GOST) R 34.1
   </section>
 
   <section title="GOST DNSKEY RR Example" ><t>
-   Given a private key with the following value (the value of the
-   Gost12Asn1 field is split here into two lines to simplify reading; in
-   the private key file, it must be in one line):</t>
+   Given a private key with the following value:</t>
 
 <figure><artwork><![CDATA[
 Private-key-format: v1.2
 Algorithm: 23 (ECC-GOST12)
-Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/
-            Mw9o6R5lQHJ13jz0W+C1tdsS4W7RJn04rk9MGJq3Hg==
+Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/Mw9o6R5lQHJ13jz0W+C1tdsS4W7RJn04rk9MGJq3Hg==
 
 The following DNSKEY RR stores a DNS zone key for example:
 
@@ -190,6 +187,7 @@ example.  600  IN  DNSKEY  256 3 23 (
             IQ8nOXrilXZ9HcY8b2AETkWrtWHfwvJD4twPPJFQSA==
     ) ;{id = 47355 (zsk), size = 512b}
 ]]></artwork>
+    <t>Note: Algorithm numbers 23 and 5 are used in this document as an example, since the actual numbers have not yet been assigned.</t>
   </figure>
   <t>Public key can be calculated from the private key using algorithm described in RFC 7091 <xref target="RFC7091"/>.</t>
   </section>
@@ -216,7 +214,7 @@ hash = GOSTR3411-2012(data)
    RFC 7091 <xref target="RFC7091"/>.</t>
 
   <section title="RRSIG RR Example" ><t>
-   With the private key from this document,
+   With the private key from this document, sign following RRSet,
    consisting of one MX record:</t>
 
   <t><list hangIndent="3" style="hanging"><t>
@@ -240,7 +238,7 @@ example.  600 IN  RRSIG MX 23 1 600 20221103123230 (
   </figure>
 
   <t>
-   The ECC-GOST12 signature algorithm uses random (pseudorandom) integer k as descibed in Section 6.1 of RFC 7091 <xref target="RFC7091"/>.
+   The ECC-GOST12 signature algorithm uses random (pseudorandom) integer k as described in Section 6.1 of RFC 7091 <xref target="RFC7091"/>.
    The following constant was used to replace k to provide a reproducible signature example.</t>
       <figure><artwork><![CDATA[
 k = 8BBD0CE7CAF3FC1C2503DF30D13ED5DB75EEC44060FA22FB7E29628407C1E34
@@ -278,7 +276,6 @@ example.  IN  DS  29468 23 5 (
                       )
 ]]></artwork>
   </figure>
-  <t>Note: Algorithm number 23 is used here as an example, since the actual number has not yet been assigned.</t>
   </section>
 
   </section>
@@ -327,18 +324,32 @@ The size of a GOST digest conforming to this specification MUST be 256 bits acco
   <section title="Update to RFC 8624">
   <t>
   This document updates RFC8624 <xref target="RFC8624" />.
-  The paragraph describing the state of GOST algorithms in section 3.1 of RFC 8624 currently says:
+  The paragraph describing the state of GOST R 34.10-2012 algorithm in section 3.1 of RFC 8624 currently says:
   </t>
   <t>
   ECC-GOST (GOST R 34.10-2001) has been superseded by GOST R 34.10-2012
-   in [RFC7091].  GOST R 34.10-2012 hasn't been standardized for use in
+   in [RFC7091]. GOST R 34.10-2012 hasn't been standardized for use in
    DNSSEC.
   </t>
   <t>That paragraph is now replaced with the following:</t>
   <t>
   ECC-GOST (GOST R 34.10-2001) has been superseded by GOST R 34.10-2012
-   in [RFC7091].  GOST R 34.10-2012 has been standardized for use in
+   in [RFC7091]. GOST R 34.10-2012 has been standardized for use in
    DNSSEC in RFC TBC.
+  </t>
+  <t>
+  The paragraph describing the state of GOST R 34.11-2012 algorithm in section 3.3 of RFC 8624 currently says:
+  </t>
+  <t>
+  GOST R 34.11-94 has been superseded by GOST R 34.11-2012 in
+  [RFC6986]. GOST R 34.11-2012 has not been standardized for use in
+  DNSSEC.
+  </t>
+  <t>That paragraph is now replaced with the following:</t>
+  <t>
+  GOST R 34.11-94 has been superseded by GOST R 34.11-2012 in
+  [RFC6986]. GOST R 34.10-2012 has been standardized for use in
+  DNSSEC in RFC TBC.
   </t>
   </section>
 
