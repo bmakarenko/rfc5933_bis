@@ -15,7 +15,7 @@
 <!ENTITY RFC8624 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8624.xml">
 <!ENTITY RFC9125 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9125.xml">
 ]>
-<rfc docName="draft-ietf-dnsop-rfc5933-bis-10" category="info" ipr="trust200902" obsoletes="5933" updates="8624">
+<rfc docName="draft-ietf-dnsop-rfc5933-bis-11" category="info" ipr="trust200902" obsoletes="5933" updates="8624">
   <?rfc strict="yes"?>
   <?rfc compact="yes"?>
   <?rfc subcompact="no"?>
@@ -63,7 +63,7 @@
         <email>bmakarenko@tcinet.ru</email>
       </address>
     </author>
-  <date month="October" year="2022" day="6"/>
+  <date month="October" year="2022" day="20"/>
   <abstract><t>
    This document describes how to produce digital signatures and hash
    functions using the GOST R 34.10-2012 and GOST R 34.11-2012 algorithms
