@@ -178,7 +178,8 @@ The OIDs in the structure above represent GOsudarstvennyy STandart (GOST) R 34.1
 <figure><artwork><![CDATA[
 Private-key-format: v1.2
 Algorithm: 23 (ECC-GOST12)
-Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/Mw9o6R5lQHJ13jz0W+C1tdsS4W7RJn04rk9MGJq3Hg==
+Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/
+            Mw9o6R5lQHJ13jz0W+C1tdsS4W7RJn04rk9MGJq3Hg==
 
 The following DNSKEY RR stores a DNS zone key for example:
 
@@ -186,9 +187,8 @@ example.  600  IN  DNSKEY  256 3 23 (
             XGiiHlKUJd5fSeAK5O3L4tUNCPxs4pGqum6wKbqjdkqu
             IQ8nOXrilXZ9HcY8b2AETkWrtWHfwvJD4twPPJFQSA==
     ) ;{id = 47355 (zsk), size = 512b}
-]]></artwork>
+]]></artwork></figure>
     <t>Note: Algorithm numbers 23 and 5 are used in this document as an example, since the actual numbers have not yet been assigned.</t>
-  </figure>
   <t>Public key can be calculated from the private key using algorithm described in RFC 7091 <xref target="RFC7091"/>.</t>
   </section>
 
@@ -378,9 +378,9 @@ The size of a GOST digest conforming to this specification MUST be 256 bits acco
     The following entries have been added to the registry:
   </t>
   <figure><artwork><![CDATA[
-                                    Zone    Trans.
-Value  Algorithm         Mnemonic  Signing Sec.  References
-TBA1   GOST R 34.10-2012 ECC-GOST12    Y   *     RFC TBA
+                                     Zone    Trans.
+Value  Description       Mnemonic    Signing Sec.   References
+TBA1   GOST R 34.10-2012 ECC-GOST12  Y       *      RFC TBA
 ]]></artwork>
   </figure>
 	<t>
@@ -394,8 +394,8 @@ TBA1   GOST R 34.10-2012 ECC-GOST12    Y   *     RFC TBA
     by adding an entry for the GOST R 34.11-2012 algorithm:
   </t>
   <figure><artwork><![CDATA[
-   Value   Algorithm
-   TBA2    GOST R 34.11-2012
+   Value   Description         Status      Reference
+   TBA2    GOST R 34.11-2012   OPTIONAL    RFC TBA
 ]]></artwork>
   </figure>
 
