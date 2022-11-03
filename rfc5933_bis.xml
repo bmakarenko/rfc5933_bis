@@ -214,8 +214,8 @@ hash = GOSTR3411-2012(data)
    RFC 7091 <xref target="RFC7091"/>.</t>
 
   <section title="RRSIG RR Example" ><t>
-   With the private key from this document, sign following RRSet,
-   consisting of one MX record:</t>
+   Consider a given RRset consisting of one MX RR to be signed with the private key described in Section 2.2 of this
+document:</t>
 
   <t><list hangIndent="3" style="hanging"><t>
 example.  600  IN  MX  10 mail.example.</t>
