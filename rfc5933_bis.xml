@@ -15,7 +15,7 @@
 <!ENTITY RFC8624 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8624.xml">
 <!ENTITY RFC9125 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9125.xml">
 ]>
-<rfc docName="draft-ietf-dnsop-rfc5933-bis-11" category="info" ipr="trust200902" obsoletes="5933" updates="8624">
+<rfc docName="draft-ietf-dnsop-rfc5933-bis-13" category="info" ipr="trust200902" obsoletes="5933" updates="8624">
   <?rfc strict="yes"?>
   <?rfc compact="yes"?>
   <?rfc subcompact="no"?>
@@ -63,7 +63,7 @@
         <email>bmakarenko@tcinet.ru</email>
       </address>
     </author>
-  <date month="October" year="2022" day="20"/>
+  <date month="November" year="2022" day="30"/>
   <abstract><t>
    This document describes how to produce digital signatures and hash
    functions using the GOST R 34.10-2012 and GOST R 34.11-2012 algorithms
@@ -94,6 +94,10 @@
   <t>
     This document obsoletes RFC5933 <xref target="RFC5933"/>.
 		This document also marks the DNS Security Algorithm GOST R 34.10-2001 as obsolete.
+  </t>
+  <t>
+    Algorithms GOST R 34.10-2012 and GOST R 34.11-2012 are national standards.
+    Their cryptographic properties haven't been independently verified.
   </t>
   <t>
    Familiarity with DNSSEC and with GOST signature and hash algorithms
@@ -175,21 +179,24 @@ The OIDs in the structure above represent GOsudarstvennyy STandart (GOST) R 34.1
   <section title="GOST DNSKEY RR Example" ><t>
    Given a private key with the following value:</t>
 
-<figure><artwork><![CDATA[
+<figure><artwork>
 Private-key-format: v1.2
 Algorithm: 23 (ECC-GOST12)
-Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/
-            Mw9o6R5lQHJ13jz0W+C1tdsS4W7RJn04rk9MGJq3Hg==
-
-The following DNSKEY RR stores a DNS zone key for example:
-
+Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/Mw9o6R5lQHJ13jz0
+            W+C1tdsS4W7RJn04rk9MGJq3Hg==
+</artwork></figure>
+<t>
+    The following DNSKEY RR stores a DNS zone key for example:
+</t>
+<figure><artwork>
 example.  600  IN  DNSKEY  256 3 23 (
             XGiiHlKUJd5fSeAK5O3L4tUNCPxs4pGqum6wKbqjdkqu
             IQ8nOXrilXZ9HcY8b2AETkWrtWHfwvJD4twPPJFQSA==
     ) ;{id = 47355 (zsk), size = 512b}
-]]></artwork></figure>
-    <t>Note: Algorithm numbers 23 and 5 are used in this document as an example, since the actual numbers have not yet been assigned.</t>
-  <t>Public key can be calculated from the private key using algorithm described in RFC 7091 <xref target="RFC7091"/>.</t>
+</artwork></figure>
+    <t>Public key can be calculated from the private key using algorithm described in RFC 7091 <xref target="RFC7091"/>.</t>
+    <t>[RFC Editor note: Algorithm numbers 23 and 5 are used in this document as an example, since the actual numbers have not yet been assigned.
+        If the assigned values will differ, the example keys and signatures will have to be recalculated before the official publication of the RFC.]</t>
   </section>
 
   </section>
@@ -214,14 +221,10 @@ hash = GOSTR3411-2012(data)
    RFC 7091 <xref target="RFC7091"/>.</t>
 
   <section title="RRSIG RR Example" ><t>
-   With the private key from this document, sign following RRSet,
-   consisting of one MX record:</t>
+   Consider a given RRset consisting of one MX RR to be signed with the private key described in Section 2.2 of this document:</t>
 
-  <t><list hangIndent="3" style="hanging"><t>
-example.  600  IN  MX  10 mail.example.</t>
-
-  </list>
-  </t>
+  <figure><artwork>
+example.  600  IN  MX  10 mail.example.</artwork></figure>
 
   <t>
    Setting the inception date to 2022-10-06 12:32:30 UTC and the
@@ -300,10 +303,10 @@ The size of a GOST digest conforming to this specification MUST be 256 bits acco
 
   <section title="Implementation Considerations">
   <t>
-  The support of this cryptographic suite in DNSSEC-aware systems is OPTIONAL. According to RFC6840 <xref target="RFC6840"/>, Section 5.2 systems that do not support these algorithms may ignore the RRSIG, DNSKEY and DS records created with them.
+  The support of this cryptographic suite in DNSSEC-aware systems is OPTIONAL. According to RFC6840 <xref target="RFC6840"/>, Section 5.2 systems that do not support these algorithms MUST ignore the RRSIG, DNSKEY and DS records created with them.
   </t>
   <t>
-  (To be removed in RFC). To check the correctness of the implementation, authors recommend using OpenSSL 1.1.1 or 3.0.x series, a fork of ldns available at https://github.com/beldmit/ldns, and a reference implementation of GOST crypto algorithms available at https://github.com/gost-engine/engine.
+  [(To be removed in RFC). To check the correctness of the implementation, authors recommend using OpenSSL 1.1.1 or 3.0.x series, a fork of ldns available at https://github.com/beldmit/ldns, and a reference implementation of GOST crypto algorithms available at https://github.com/gost-engine/engine.]
   </t>
 
   </section>
@@ -372,21 +375,21 @@ The size of a GOST digest conforming to this specification MUST be 256 bits acco
 
   </section>
 
-  <section title="IANA Considerations" ><t>
+  <section title="IANA Considerations" >
+      <t>
     This document updates the IANA registry
     "DNS Security Algorithm Numbers".
     The following entries have been added to the registry:
   </t>
   <figure><artwork><![CDATA[
-                                     Zone    Trans.
-Value  Description       Mnemonic    Signing Sec.   References
-TBA1   GOST R 34.10-2012 ECC-GOST12  Y       *      RFC TBA
+                                    Zone    Trans.
+Value  Algorithm         Mnemonic  Signing Sec.  References
+TBA1   GOST R 34.10-2012 ECC-GOST12    Y   *     RFC TBA
 ]]></artwork>
   </figure>
 	<t>
-   The entry for the Algorithm "GOST R 34.10-2001", number 12 should be updated
-   as such:  Description field should be changed to "GOST R 34.10-2001 (deprecated, see TBA1"
-   and Zone Signing field should be changed to "N".</t>
+   The description field of entry for the algorithm "GOST R 34.10-2001", number 12 should be changed
+   to "GOST R 34.10-2001 (deprecated, see TBA1)"</t>
 
   <t>
     This document updates the RFC IANA registry
@@ -394,16 +397,17 @@ TBA1   GOST R 34.10-2012 ECC-GOST12  Y       *      RFC TBA
     by adding an entry for the GOST R 34.11-2012 algorithm:
   </t>
   <figure><artwork><![CDATA[
-   Value   Description         Status      Reference
-   TBA2    GOST R 34.11-2012   OPTIONAL    RFC TBA
+Value   Algorithm
+TBA2    GOST R 34.11-2012
 ]]></artwork>
   </figure>
 
   <t>The entry for Value 3, GOST R 34.11-94 should be updated to
    have its Status changed to '-'.</t>
-  <t>This paragraph shoud be removed before the publication of RFC:
+  <t>[RFC editor note:
   For the purpose of example computations, the following values were used:
-  TBA1 = 23, TBA2 = 5.</t>
+  TBA1 = 23, TBA2 = 5. If the assigned values will differ, the example keys and signatures
+      will have to be recalculated before the official publication of the RFC.]</t>
   </section>
 
   <section title="Acknowledgments" ><t>
@@ -444,4 +448,3 @@ TBA1   GOST R 34.10-2012 ECC-GOST12  Y       *      RFC TBA
   </back>
 
   </rfc>
-

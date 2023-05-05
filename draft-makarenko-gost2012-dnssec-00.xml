@@ -1,0 +1,402 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC3110 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3110.xml">
+<!ENTITY RFC4033 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml">
+<!ENTITY RFC4034 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml">
+<!ENTITY RFC4035 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml">
+<!ENTITY RFC4509 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.4509.xml">
+<!ENTITY RFC5933 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5933.xml">
+<!ENTITY RFC6840 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6840.xml">
+<!ENTITY RFC6986 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6986.xml">
+<!ENTITY RFC7091 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7091.xml">
+<!ENTITY RFC7836 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7836.xml">
+<!ENTITY RFC8174 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
+<!ENTITY RFC9125 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9125.xml">
+]>
+<rfc docName="draft-makarenko-gost2012-dnssec-00" category="info" ipr="trust200902">
+  <?rfc strict="yes"?>
+  <?rfc compact="yes"?>
+  <?rfc subcompact="no"?>
+  <?rfc symrefs="yes"?>
+  <?rfc sortrefs="no"?>
+  <?rfc text-list-symbols="o*+-"?>
+  <?rfc toc="yes"?>
+  <front>
+  <title abbrev="Use of GOST 2012 Signatures in DNSSEC">
+    Use of GOST 2012 Signature Algorithms in DNSKEY and RRSIG Resource Records for DNSSEC
+  </title>
+
+  <author fullname="Dmitry Belyavskiy" initials="D." surname="Belyavskiy">
+    <organization>TCINET</organization>
+    <address>
+      <postal>
+        <street>8 marta st</street>
+        <city>Moscow</city>
+        <country>Russian Federation</country>
+      </postal>
+      <phone>+7 916 262 5593</phone>
+      <email>beldmit@gmail.com</email>
+    </address>
+  </author>
+  <author fullname="Vasily Dolmatov" initials="V." surname="Dolmatov" role="editor">
+      <organization>JSC "NPK Kryptonite"</organization>
+      <address>
+        <postal>
+          <street>Spartakovskaya sq., 14, bld 2, JSC "NPK Kryptonite"</street>
+          <city>Moscow</city>
+          <code>105082</code>
+          <country>Russian Federation</country>
+        </postal>
+        <email>vdolmatov@gmail.com</email>
+      </address>
+    </author>
+  <author fullname="Boris Makarenko" initials="B." surname="Makarenko" role="editor">
+    <organization>The Technical center of Internet, LLC</organization>
+      <address>
+        <postal>
+          <street>8 marta str., 1, bld 12</street>
+          <city>Moscow</city>
+          <code>127083</code>
+          <country>Russian Federation</country>
+        </postal>
+        <email>bmakarenko@tcinet.ru</email>
+      </address>
+  </author>
+  <date month="May" year="2023" day="5"/>
+  <abstract>
+    <t>
+      This document describes how to produce digital signatures and hash
+      functions using the GOST R 34.10-2012 and GOST R 34.11-2012 algorithms
+      for DNSKEY, RRSIG, and DS resource records, for use in the Domain
+      Name System Security Extensions (DNSSEC).
+    </t>
+  </abstract>
+  </front>
+  <middle>
+    <section title="Introduction">
+      <t>
+        The Domain Name System (DNS) is the global hierarchically distributed
+        database for Internet Naming. The DNS has been extended to use
+        cryptographic keys and digital signatures for the verification of the
+        authenticity and integrity of its data. RFC 4033 <xref target="RFC4033"/>, RFC 4034
+        <xref target="RFC4034"/>, and RFC 4035 <xref target="RFC4035"/> describe these DNS Security
+        Extensions, called DNSSEC.
+      </t>
+      <t>
+        RFC 4034 describes how to store DNSKEY and RRSIG resource records,
+        and specifies a list of cryptographic algorithms to use. This
+        document extends that list with the signature and hash algorithms
+        GOST R 34.10-2012 (<xref target="RFC7091"/>) and GOST R 34.11-2012
+        (<xref target="RFC6986"/>), and specifies how to store DNSKEY data and
+        how to produce RRSIG resource records with these algorithms.
+      </t>
+      <t>
+        Algorithms GOST R 34.10-2012 and GOST R 34.11-2012 are national standards.
+        Their cryptographic properties haven't been independently verified.
+      </t>
+      <t>
+        Familiarity with DNSSEC and with GOST signature and hash algorithms
+        is assumed in this document.
+      </t>
+      <section title="Terminology">
+        <t>
+          The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
+          "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted
+          as described in BCP 14 <xref target="RFC2119" /> <xref target="RFC8174" /> when, and only when,
+          they appear in all capitals, as shown here.
+        </t>
+      </section>
+    </section>
+    <section title="DNSKEY Resource Records">
+      <t>
+        The format of the DNSKEY RR can be found in RFC 4034 <xref target="RFC4034"/>.
+      </t>
+      <t>
+        GOST R 34.10-2012 public keys are stored with the algorithm number TBA1.
+      </t>
+      <t>
+        According to RFC 7091 <xref target="RFC7091"/>, a public key is a point on the
+        elliptic curve Q = (x,y). The wire representation of a public key MUST
+        contain 64 octets, where the first 32 octets contain the little-endian
+        representation of x and the second 32 octets contain the little-endian
+        representation of y.
+      </t>
+      <t>
+        As RFC 6986 and RFC 7091 allows 2 variants of length of the output hash and signature
+        and many variants of parameters of the digital signature, for the purpose of this
+        document we use 256-bit variant of the digital signature algorithm, corresponding
+        256-bit variant of the digest algorithm. We select the parameters for
+        the digital signature algorithm to be id-tc26-gost-3410-2012-256-paramSetA
+        in RFC 7836 <xref target="RFC7836"/>.
+      </t>
+      <section title="Using a Public Key with Existing Cryptographic Libraries">
+        <t>
+          At the time of this writing, existing GOST-aware cryptographic
+          libraries are capable of reading GOST public keys via a generic X.509
+          API if the key is encoded according to RFC 7091 <xref target="RFC7091"/>,
+          Section 2.3.2.
+        </t>
+        <t>
+          To make this encoding from the wire format of a GOST public key with
+          the parameters used in this document, prepend the 64 octets of key
+          data with the following 32-byte sequence:
+        </t>
+        <figure>
+          <artwork>
+0x30 0x5e 0x30 0x17 0x06 0x08 0x2a 0x85
+0x03 0x07 0x01 0x01 0x01 0x01 0x30 0x0b
+0x06 0x09 0x2a 0x85 0x03 0x07 0x01 0x02
+0x01 0x01 0x01 0x03 0x43 0x00 0x04 0x40
+</artwork>
+        </figure>
+        <t>
+          These bytes provide the following ASN.1 structure suitable for parsing by cryptographic toolkits:
+        </t>
+	    <figure>
+          <artwork>
+  0  62: SEQUENCE {
+  2   1:   INTEGER 0
+  5  23:   SEQUENCE {
+  7   8:     OBJECT IDENTIFIER '1 2 643 7 1 1 1 1'
+ 17  11:     SEQUENCE {
+ 19   9:       OBJECT IDENTIFIER '1 2 643 7 1 2 1 1 1'
+       :       }
+       :     }
+ 30  32:   OCTET STRING
+</artwork>
+        </figure>
+        <t>
+          The OIDs in the structure above represent GOsudarstvennyy STandart (GOST) R 34.10-2012 public keys
+          with 256 bits private key length algorithm with Parameter set A for Keyed-Hash Message Authentication
+          Code (HMAC) transformation based on the GOsudarstvennyy STandart (GOST) R 34.11-2012 hash function
+          with 256-bit output according to RFC 7836 <xref target="RFC7836"/> and RFC 9125 <xref target="RFC9125"/>.
+        </t>
+      </section>
+      <section title="GOST DNSKEY RR Example">
+        <t>
+          Given a private key with the following value:
+        </t>
+        <figure>
+          <artwork>
+Private-key-format: v1.2
+Algorithm: 23 (ECC-GOST12)
+Gost12Asn1: MD4CAQAwFwYIKoUDBwEBAQEwCwYJKoUDBwECAQEBBCD/Mw9o6R5lQHJ13jz0
+            W+C1tdsS4W7RJn04rk9MGJq3Hg==
+</artwork>
+        </figure>
+        <t>
+          The following DNSKEY RR stores a DNS zone key for example:
+        </t>
+        <figure>
+          <artwork>
+example.  600  IN  DNSKEY  256 3 23 (
+            XGiiHlKUJd5fSeAK5O3L4tUNCPxs4pGqum6wKbqjdkqu
+            IQ8nOXrilXZ9HcY8b2AETkWrtWHfwvJD4twPPJFQSA==
+    ) ;{id = 47355 (zsk), size = 512b}
+</artwork>
+        </figure>
+        <t>
+          Public key can be calculated from the private key using algorithm described in RFC 7091 <xref target="RFC7091"/>.
+        </t>
+        <t>
+          [RFC Editor note: Note: Algorithm numbers 23 and 5 are used as an example in this document, as actual numbers have not yet been assigned.]
+        </t>
+      </section>
+    </section>
+    <section title="RRSIG Resource Records">
+      <t>
+       The value of the signature field in the RRSIG RR follows RFC 7091
+       <xref target="RFC7091"/> and is calculated as follows.  The values for the RDATA
+       fields that precede the signature data are specified in RFC 4034
+       <xref target="RFC4034"/>.
+      </t>
+      <figure>
+        <artwork>
+hash = GOSTR3411-2012(data)
+</artwork>
+      </figure>
+      <t>
+        where "data" is the wire format data of the resource record set that
+        is signed, as specified in RFC 4034 <xref target="RFC4034"/>.
+      </t>
+      <t>
+        The signature is calculated from the hash according to the
+        GOST R 34.10-2012 standard, and its wire format is compatible with
+        RFC 7091 <xref target="RFC7091"/>.
+      </t>
+      <section title="RRSIG RR Example">
+        <t>
+          Consider a given RRset consisting of one MX RR to be signed with the
+          private key described in Section 2.2 of this document:
+        </t>
+          <figure><artwork>
+example.  600  IN  MX  10 mail.example.</artwork>
+          </figure>
+        <t>
+          Setting the inception date to 2022-10-06 12:32:30 UTC and the
+          expiration date to 2022-11-03 12:32:30 UTC, the following signature
+          RR will be valid:
+        </t>
+        <figure>
+          <artwork>
+example.  600 IN  RRSIG MX 23 1 600 20221103123230 (
+                       20221006123230 47355 example.
+                       EuLO0Qpn6zT1pzj9T2H5AWjcgzfmjNiK/vj811bExa0V
+                       HMOVD9ma8rpf0B+D+V4Q0CWu1Ayzu+H/SyndnOWGxw==
+)
+</artwork>
+        </figure>
+        <t>
+          The GOST R 34.10-2012 signature algorithm uses random (pseudorandom) integer k as described in Section 6.1
+          of RFC 7091 <xref target="RFC7091"/>.
+          The following constant was used to replace k to provide a reproducible signature example.</t>
+        <figure>
+          <artwork>
+k = 8BBD0CE7CAF3FC1C2503DF30D13ED5DB75EEC44060FA22FB7E29628407C1E34
+</artwork>
+        </figure>
+        <t>
+          This constant MUST NOT be used when computing GOST R 34.10-2012 signatures.
+          It is provided only so the above signature example can be reproduced.
+          The actual signature value will differ between signature calculations.
+        </t>
+      </section>
+    </section>
+    <section title="DS Resource Records">
+      <t>
+        The GOST R 34.11-2012 digest algorithm is denoted in DS RRs by the
+        digest type TBA2. The wire format of a digest value is compatible with
+        RFC 6986 <xref target="RFC6986"/>.
+      </t>
+      <section title="DS RR Example">
+        <t>
+          For Key Signing Key (KSK):
+        </t>
+        <figure>
+          <artwork>
+example.  IN  DNSKEY  257 3 23 (
+                       p8Req8DLJOfPymO5vExuK4gCcihF5N1YL7veCJ47av+w
+                       h/qs9yJpD064k02rYUHfWnr7IjvJlbn3Z0sTZe9GRQ==
+                       ) ;{id = 29468 (ksk), size = 512b}
+</artwork>
+        </figure>
+        <t>
+          The DS RR will be:
+        </t>
+        <figure>
+          <artwork>
+example.  IN  DS  29468 23 5 (
+                      6033725b0ccfc05d1e9d844d49c6cf89
+                      0b13d5eac9439189947d5db6c8d1c1ec
+                      )
+</artwork>
+        </figure>
+      </section>
+    </section>
+    <section title="Operational Considerations">
+      <section title="Key Sizes">
+        <t>
+          The key size of GOST public keys conforming to this specification MUST be 512 bits according to RFC 7091 <xref target="RFC7091"/>.
+        </t>
+      </section>
+      <section title="Signature Sizes">
+        <t>
+          The size of a GOST signature conforming to this specification MUST be 512 bits according to RFC 7091 <xref target="RFC7091"/>.
+        </t>
+      </section>
+      <section title="Digest Sizes">
+        <t>
+          The size of a GOST digest conforming to this specification MUST be 256 bits according to RFC 6986 <xref target="RFC6986"/>.
+        </t>
+      </section>
+    </section>
+    <section title="Implementation Considerations">
+      <t>
+        The support of this cryptographic suite in DNSSEC-aware systems is OPTIONAL. According to RFC6840 <xref target="RFC6840"/>, Section 5.2 systems that do not support these algorithms MUST ignore the RRSIG, DNSKEY and DS records created with them.
+      </t>
+      <t>
+        [(To be removed in RFC). To check the correctness of the implementation, authors recommend using OpenSSL 1.1.1 or 3.0.x series, a fork of ldns available at https://github.com/beldmit/ldns/tree/gost2012, and a reference implementation of GOST crypto algorithms available at https://github.com/gost-engine/engine.]
+      </t>
+    </section>
+    <section title="IANA Considerations">
+      <t>
+        This document updates the IANA registry
+        "DNS Security Algorithm Numbers".
+        The following entries have been added to the registry:
+      </t>
+      <figure>
+        <artwork>
+                                   Zone    Trans.
+Value  Algorithm         Mnemonic  Signing Sec.  References
+TBA1   GOST R 34.10-2012 ECC-GOST12    Y   *     RFC TBA
+</artwork>
+      </figure>
+      <t>
+        This document updates the IANA registry
+        "Delegation Signer (DS) Resource Record (RR) Type Digest Algorithms"
+        by adding an entry for the GOST R 34.11-2012 algorithm:
+      </t>
+      <figure>
+        <artwork>
+Value   Algorithm
+TBA2    GOST R 34.11-2012
+</artwork>
+      </figure>
+      <t>
+          [RFC editor note:
+          For the purpose of example computations, the following values were used:
+          TBA1 = 23, TBA2 = 5. If the assigned values will differ, the example keys and signatures
+          will have to be recalculated before the official publication of the RFC.]
+      </t>
+    </section>
+    <section title="Security Considerations">
+      <t>
+       It is recommended to use a dual KSK algorithm signed zone until GOST-aware DNSSEC software become more widespread, unless GOST-only cryptography is required.
+       Otherwise, GOST-signed zones may be considered unsigned by the DNSSEC software currently in use.
+      </t>
+      <t>
+        Currently, the cryptographic resistance of the GOST R 34.10-2012
+        digital signature algorithm is estimated as 2**128 operations of
+        multiple elliptic curve point computations on prime modulus of order 2**256.
+      </t>
+      <t>
+        Currently, the cryptographic collision resistance of the GOST R 34.11-2012
+        hash algorithm is estimated as 2**128 operations of computations of a step
+        hash function.
+      </t>
+    </section>
+    <section title="Acknowledgments">
+      <t>
+        This document is a minor extension to RFC 4034 <xref target="RFC4034"/>. Also, we
+        tried to follow the documents RFC 3110 <xref target="RFC3110"/>, RFC 4509 <xref target="RFC4509"/>,
+        and RFC 5933 <xref target="RFC5933"/> for consistency. The authors of and
+        contributors to these documents are gratefully acknowledged for their hard work.
+      </t>
+      <t>
+        The following people provided additional feedback, text, and valuable
+        assistance: Alexander Venedyukhin, Michael StJohns, Valery Smyslov, Tim Wicinski, Stephane Bortzmeyer.
+      </t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      &RFC2119;
+      &RFC3110;
+      &RFC4033;
+      &RFC4034;
+      &RFC4035;
+      &RFC6840;
+      &RFC6986;
+      &RFC7091;
+      &RFC7836;
+      &RFC8174;
+    </references>
+    <references title="Informative References">
+      &RFC4509;
+      &RFC5933;
+      &RFC9125;
+    </references>
+  </back>
+</rfc>
